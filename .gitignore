@@ -1,0 +1,5 @@
+.env
+.ig_session.json
+group_bot.sqlite3
+__pycache__/
+*.py[cod]
