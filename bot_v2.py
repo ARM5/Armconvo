@@ -102,6 +102,8 @@ def handle_command(conn, thread_id, sender, raw_text):
         return
     command = parts[0].lower()
     is_admin = sender.lower() in ADMIN_USERNAMES
+    if muted and command != "!unmute":
+        return
 
     if command in ("!help", "!commands"):
         safe_send(thread_id, "🤖 Group Bot Commands\n!ping — bot status\n!rules — group rules\n!help — commands\nAdmin: !mute, !unmute, !welcome on/off")
@@ -173,7 +175,7 @@ def process_messages(conn, thread_id, thread):
             continue
         conn.execute("INSERT OR IGNORE INTO seen_messages(message_id) VALUES(?)", (message_id,))
         conn.commit()
-        if body.strip().startswith("!") and not muted:
+        if body.strip().startswith("!"):
             handle_command(conn, thread_id, sender, body)
 
 
